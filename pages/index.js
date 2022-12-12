@@ -20,7 +20,7 @@ export default function Home({ posts }) {
 
   return (
     <div className={styles.container}>
-      <h1>Hello chat!</h1>
+      <h1>Hello Chatten!</h1>
       <pre>{JSON.stringify(posts, null, 2)}</pre>
     </div>
   );
