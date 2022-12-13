@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import supabase from '../utils/supabase';
 
 export async function getServerSideProps({ params }) {
+
   const { data: post, error } = await supabase
     .from('posts')
     .select('*, comments(*)')
@@ -18,6 +19,8 @@ export async function getServerSideProps({ params }) {
     },
   };
 }
+
+
 
 export default function PostPage({ post = {} }) {
   useEffect(() => {
