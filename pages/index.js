@@ -1,30 +1,44 @@
 import styles from '../styles/Home.module.css';
 import supabase from '../utils/supabase';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import {useEffect, useState} from 'react';
 
+const Index = () => {
+  const [fetchError, setFetchError] = useState(null);
+  const [posts, setPosts] = useState(null);
 
-export async function getStaticProps() {
-  const { data: posts, error } = await supabase.from('posts').select('*');
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { posts, error } = await supabase
+        .from('posts')
+        .select('*');
 
-  if (error) {
-    throw new Error(error);
-  }
+      if (error) {
+        setFetchError('Could not fetch posts');
+        setPosts(null);
+        console.log(error);
+      }
 
-  return {
-    props: {
-      posts,
-    },
-  };
-}
+      if (posts) {
+        setPosts(posts);
+        setFetchError(null);
+      }
+    };
 
-export default function Home({ posts }) {
-  console.log(supabase.auth.user());
+    fetchPosts();
+  }, []);
 
   return (
     <div className={styles.container}>
-      <h1>Hello Chattennetlify!</h1>
-      <pre>{JSON.stringify(posts, null, 2)}</pre>
+      {fetchError && <p>{fetchError}</p>}
+      {posts && (
+        <div className="posts">
+          {posts.map((posts) => (
+            <p>{posts.title}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Index;
